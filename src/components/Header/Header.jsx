@@ -54,9 +54,11 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <button className="bg-purple-950 hover:bg-purple-800 text-white px-4 py-2 rounded-md font-medium transition duration-300">
-              Log In
-            </button>
+            <Link to="/user">
+              <button className="bg-purple-950 hover:bg-purple-800 text-white px-4 py-2 rounded-md font-medium transition duration-300">
+                Log In
+              </button>
+            </Link>
           </div>
 
           <button className="md:hidden text-gray-600">

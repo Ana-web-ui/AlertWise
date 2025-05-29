@@ -5,8 +5,8 @@ const User = () => {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-         <Avatar/>
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+          <Avatar />
+          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">
             Sign in to your account
           </h2>
         </div>
@@ -16,7 +16,7 @@ const User = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm/6 font-medium text-gray-900"
+                className="block text-sm/6 font-medium text-white"
               >
                 Email address
               </label>
@@ -36,7 +36,7 @@ const User = () => {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  className="block text-sm/6 font-medium text-white"
                 >
                   Password
                 </label>
@@ -71,15 +71,7 @@ const User = () => {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Not a member?{" "}
-            <a
-              href="#"
-              className="font-semibold text-indigo-600 hover:text-indigo-500"
-            >
-              Start a 14 day free trial
-            </a>
-          </p>
+         
         </div>
       </div>
     </>
