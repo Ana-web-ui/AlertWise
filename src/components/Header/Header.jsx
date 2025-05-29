@@ -32,13 +32,13 @@ const Header = () => {
               Ranking
             </Link>
             <Link
-              to="#"
+              to="/alertas"
               className="text-sky-50 hover:text-gray-900 font-medium"
             >
               Alertas
             </Link>
             <Link
-              to="#"
+              to="relatar"
               className="text-sky-50 hover:text-gray-900 font-medium"
             >
               Relatar

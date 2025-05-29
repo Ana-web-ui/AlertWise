@@ -6,6 +6,8 @@ import HeatmapGlobal from "./components/HeatmapGlobal/HeatmapGlobal";
 import Home from "./Screens/Home";
 import User from "./Screens/User";
 import LeaderboardPage from "./Screens/LeaderboardPage";
+import Alertas from "./Screens/Alertas";
+import Relatar from "./Screens/Relatar";
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
         <Route path="/heatmap" element={<HeatmapGlobal />} />
         <Route path="/user" element={<User />} />
         <Route path="/leaderboardPage" element={<LeaderboardPage />} />
+        <Route path="/alertas" element={<Alertas />} />
+        <Route path="/relatar" element={<Relatar />} />
       </Routes>
     </Router>
   );
