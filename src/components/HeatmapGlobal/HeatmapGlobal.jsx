@@ -1,50 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat';
 
-// Dados reais de eventos climáticos (NASA EONET)
 const fetchClimateEvents = async () => {
   try {
     const response = await fetch('https://eonet.gsfc.nasa.gov/api/v3/events?days=30&status=open');
     const data = await response.json();
-    return data.events.map(event => [
-      event.geometry[0].coordinates[1],
-      event.geometry[0].coordinates[0],
-      event.categories[0].id === 'severeStorms' ? 0.8 :
-      event.categories[0].id === 'wildfires' ? 0.6 : 0.4
-    ]);
+    return data.events;
   } catch (error) {
     console.error("Erro ao buscar dados climáticos:", error);
     return [];
   }
 };
 
-const HeatmapLayer = ({ points }) => {
+const HeatmapLayer = ({ events }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (!map || points.length === 0) return;
+    if (!map || events.length === 0) return;
+
+    const points = events.map(event => [
+      event.geometry[0].coordinates[1],
+      event.geometry[0].coordinates[0],
+      event.categories[0].id === 'severeStorms' ? 0.8 :
+      event.categories[0].id === 'wildfires' ? 0.6 : 0.4
+    ]);
 
     const heatLayer = L.heatLayer(points, { radius: 15, blur: 15 }).addTo(map);
 
     return () => {
       map.removeLayer(heatLayer);
     };
-  }, [map, points]);
+  }, [map, events]);
 
   return null;
 };
 
 const HeatmapGlobal = () => {
-  const [points, setPoints] = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
-      const events = await fetchClimateEvents();
-      setPoints(events);
+      const data = await fetchClimateEvents();
+      setEvents(data);
       setLoading(false);
     };
     loadData();
@@ -62,11 +63,24 @@ const HeatmapGlobal = () => {
           zoom={2}
           style={{ height: '100%', width: '100%' }}
           attributionControl={false}
+          worldCopyJump={true} // <- corrige o corte
         >
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           />
-          <HeatmapLayer points={points} />
+          <HeatmapLayer events={events} />
+          {events.map((event, idx) => {
+            const [lon, lat] = event.geometry[0].coordinates;
+            return (
+              <Marker key={idx} position={[lat, lon]}>
+                <Popup>
+                  <strong>{event.title}</strong><br />
+                  Categoria: {event.categories[0].title}<br />
+                  Fonte: <a href={event.sources[0]?.url} target="_blank" rel="noopener noreferrer">Ver mais</a>
+                </Popup>
+              </Marker>
+            );
+          })}
         </MapContainer>
       )}
     </div>
