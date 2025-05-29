@@ -5,6 +5,7 @@ import Mapa from "./components/Mapa/Mapa";
 import HeatmapGlobal from "./components/HeatmapGlobal/HeatmapGlobal";
 import Home from "./Screens/Home";
 import User from "./Screens/User";
+import LeaderboardPage from "./Screens/LeaderboardPage";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/mapa" element={<Mapa />} />
         <Route path="/heatmap" element={<HeatmapGlobal />} />
         <Route path="/user" element={<User />} />
+        <Route path="/leaderboardPage" element={<LeaderboardPage />} />
       </Routes>
     </Router>
   );

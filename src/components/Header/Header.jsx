@@ -26,7 +26,7 @@ const Header = () => {
               Mapa
             </Link>
             <Link
-              to="#"
+              to="/leaderboardPage"
               className="text-sky-50 hover:text-gray-900 font-medium"
             >
               Ranking
