@@ -3,15 +3,11 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="bg-sky-500 shadow-sm">
+    <header className="bg-indigo-800 shadow-sm">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <img
-              src="C:\\NovaPasta\\Ana Carolina Leite\\AlertWise\\frontend\\logo.png"
-              alt="Logo"
-              className="h-8 w-8"
-            />
+            <img src="/logo.png" alt="Logo" className="h-10 w-10" />
             <span className="text-xl font-semibold text-gray-900">
               AlertWise
             </span>
