@@ -1,4 +1,3 @@
-// src/pages/Alertas.jsx
 import React from "react";
 
 const alertas = [
@@ -26,26 +25,24 @@ const alertas = [
 ];
 
 const tipoCor = {
-  perigo: "bg-red-600 text-white",
-  aviso: "bg-yellow-400 text-black",
-  info: "bg-blue-500 text-white",
+  perigo: "bg-red-400",
+  aviso: "bg-yellow-300",
+  info: "bg-green-300",
 };
 
 export default function Alertas() {
   return (
-    <div className="min-h-screen  p-6">
-      <h1 className="text-3xl font-bold text-white mb-6">📢 Alertas</h1>
-      <div className="space-y-4">
+    <div className=" p-6 bg-gradient-to-b from-blue-800 to-blue-900">
+      <h1 className="text-3xl font-bold text-white mb-6">📢 Alertas Recentes</h1>
+      
+      <div className="bg-white rounded-xl shadow-md p-4 space-y-2">
         {alertas.map((alerta) => (
           <div
             key={alerta.id}
-            className={`rounded-xl shadow p-4 ${tipoCor[alerta.tipo]}`}
+            className={`w-full h-10 ${tipoCor[alerta.tipo]} rounded-lg flex items-center justify-between px-4`}
           >
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">{alerta.titulo}</h2>
-              <span className="text-sm opacity-70">{alerta.data}</span>
-            </div>
-            <p className="mt-2">{alerta.descricao}</p>
+            <span className="font-semibold">{alerta.titulo}</span>
+            <span className="text-sm">{alerta.data}</span>
           </div>
         ))}
       </div>

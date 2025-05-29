@@ -1,5 +1,4 @@
 import React from 'react';
-import HeatmapGlobal from '../components/HeatmapGlobal/HeatmapGlobal';
 const About = () => {
   return (
     <>
@@ -64,7 +63,7 @@ const About = () => {
           </div>
         </section>
       </div>
-    <HeatmapGlobal/>
+
     </>
   );
 };
