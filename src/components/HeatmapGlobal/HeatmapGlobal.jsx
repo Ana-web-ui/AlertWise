@@ -70,7 +70,7 @@ const HeatmapGlobal = () => {
           zoom={2}
           style={{ height: "100%", width: "100%" }}
           attributionControl={false}
-          worldCopyJump={true} // <- corrige o corte
+          worldCopyJump={true}
         >
           <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
           <HeatmapLayer events={events} />
@@ -81,6 +81,13 @@ const HeatmapGlobal = () => {
             return (
               <Marker key={idx} position={[lat, lon]}>
                 <Popup>
+                  {/* Ícone de localização no topo */}
+                  <img
+                    src="/local-icon.png"
+                    alt="Ícone de localização"
+                    style={{ width: "20px", height: "20px", marginBottom: "5px" }}
+                  />
+                  <br />
                   <strong>{event.title}</strong>
                   <br />
                   Categoria: {event.categories[0].title}
