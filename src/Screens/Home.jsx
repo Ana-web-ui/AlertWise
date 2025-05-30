@@ -26,11 +26,11 @@ const Home = () => {
           {/* Conteúdo do Hero */}
           <div className="relative z-10 text-center px-4 text-white max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Venha fazer parte da nossa comunidade!
+              Proteja sua comunidade das enchentes
             </h1>
             <p className="text-xl md:text-2xl mb-8">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed
-              expedita quidem aspernatur inventore animi quis.
+              Sistema inteligente que combina IA preditiva, inteligência
+              coletiva e gamificação para manter sua família segura.
             </p>
           </div>
         </section>

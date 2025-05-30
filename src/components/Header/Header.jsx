@@ -8,7 +8,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
             <img src="/logo.png" alt="Logo" className="h-10 w-10" />
-            <span className="text-xl font-semibold text-gray-900">
+            <span className="text-xl font-semibold text-white">
               AlertWise
             </span>
           </Link>
