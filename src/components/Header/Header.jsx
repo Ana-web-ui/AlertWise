@@ -16,12 +16,6 @@ const Header = () => {
           {/* Menu principal */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link
-              to="/mapa"
-              className="text-sky-50 hover:text-gray-900 font-medium"
-            >
-              Mapa
-            </Link>
-            <Link
               to="/leaderboardPage"
               className="text-sky-50 hover:text-gray-900 font-medium"
             >
