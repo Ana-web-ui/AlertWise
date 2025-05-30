@@ -1,11 +1,9 @@
-import React from 'react';
-
 export default function Precipitacao() {
   return (
-    <div className="bg-white rounded-xl p-4 shadow">
-      <h2 className="font-semibold text-lg mb-2">Precipitação</h2>
-      <p className="text-gray-700">Total acumulado: <strong>120 mm</strong></p>
-      <p className="text-gray-500 text-sm">Última atualização: 29/05/2025</p>
+    <div className="bg-white rounded-xl p-4 shadow text-center">
+      <h3 className="font-semibold text-gray-700">Precipitação</h3>
+      <p className="text-2xl font-bold text-blue-600">4,5mm</p>
+      <p className="text-sm text-gray-500">(Últimas 24h)</p>
     </div>
   );
 }

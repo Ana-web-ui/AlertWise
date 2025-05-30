@@ -6,7 +6,7 @@ const Mapa = () => {
   const position = [-23.5505, -46.6333];
 
   return (
-    <div className="w-full h-screen rounded-xl overflow-hidden border border-gray-300">
+    <div className="h-full rounded-xl overflow-hidden border border-gray-300">
       <MapContainer 
         center={[-12.51, -47.64]} 
         zoom={5} 
