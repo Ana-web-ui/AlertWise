@@ -2,9 +2,9 @@ import React from "react";
 const About = () => {
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-blue-800 to-blue-900">
+      <div className=" bg-gradient-to-b from-blue-800 to-blue-900">
         {/* Hero Section */}
-        <section className="relative py-20 px-4 text-center bg-gradient-to-br from-blue-900 to-sky-700 text-white">
+        <section className="relative  py-20 px-4 text-center bg-gradient-to-br from-blue-900 to-sky-700 text-white">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Como o AlertWise funciona
