@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Avatar from "../components/Avatar/Avatar";
+import { useState } from "react";
+import Avatar from "../components/Avatar";
 
 const User = () => {
   const [isLogin, setIsLogin] = useState(true); // Estado para controlar qual formulário mostrar

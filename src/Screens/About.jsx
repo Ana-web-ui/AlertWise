@@ -36,7 +36,7 @@ const About = () => {
             </p>
             <button
               onClick={() => setIsOpen(true)}
-              className="bg-white text-blue-800 px-6 py-3 rounded-md font-medium hover:bg-blue-100 transition duration-300"
+              className="bg-white cursor-pointer text-blue-800 px-6 py-3 rounded-md font-medium hover:bg-blue-100 transition duration-300"
             >
               Clique aqui para saber mais
             </button>
