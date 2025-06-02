@@ -1,13 +1,12 @@
-import React from "react";
-import Mapa from "../components/Mapa/Mapa";
+import Mapa from "../components/Mapa";
 import Alertas from "../Screens/Alertas";
-import Precipitacao from "../components/Precipitacao/Precipitacao";
-import Relatos from "../components/Relatos/Relatos";
-import UsuariosAtivos from "../components/UsuariosAtivos/UsuariosAtivos";
+import Precipitacao from "../components/Precipitacao";
+import Relatos from "../components/Relatos";
+import UsuariosAtivos from "../components/UsuariosAtivos";
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-800 to-blue-900 p-6">
+    <div className="min-h-screen p-6">
       {/* Cabeçalho centralizado */}
       <div className="flex flex-col items-center justify-center mb-8 text-center">
         <h1 className="text-2xl font-bold text-white mb-2">Dashboard Inteligente</h1>
@@ -24,7 +23,7 @@ export default function Dashboard() {
               placeholder="São Paulo" 
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
               Pesquisar
             </button>
           </div>

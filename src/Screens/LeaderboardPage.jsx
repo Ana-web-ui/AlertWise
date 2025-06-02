@@ -1,4 +1,4 @@
-import Ranking from "../components/Ranking/Ranking";
+import Ranking from "../components/Ranking";
 
 const players = [
   {
@@ -45,18 +45,24 @@ const players = [
 
 const LeaderboardPage = () => {
   return (
-    <div className="bg-gradient-to-b from-blue-800 to-blue-900 min-h-screen text-white p-6">
+    <div className="min-h-screen text-white p-6">
       {/* Cabeçalho */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-2">Seja um Herói da Sua Comunidade</h1>
-        <p className="text-xl text-gray-200">Ganhe reconhecimento por ajudar a proteger vidas</p>
+        <h1 className="text-3xl font-bold mb-2">
+          Seja um Herói da Sua Comunidade
+        </h1>
+        <p className="text-xl text-gray-200">
+          Ganhe reconhecimento por ajudar a proteger vidas
+        </p>
       </div>
 
       {/* Categorias de Ranking */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         {/* Meteorologista Comunitário */}
         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-colors">
-          <h3 className="text-xl font-semibold mb-2">Meteorologista Comunitário</h3>
+          <h3 className="text-xl font-semibold mb-2">
+            Meteorologista Comunitário
+          </h3>
           <p className="text-gray-300 mb-4">50 relatos precisos</p>
           <p className="text-yellow-400 font-medium">10 pontos por relato</p>
         </div>
@@ -87,7 +93,9 @@ const LeaderboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Ranking Completo */}
         <div className="lg:col-span-2 bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-          <h2 className="text-2xl font-bold mb-6 text-center">Ranking Completo</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">
+            Ranking Completo
+          </h2>
           <div className="space-y-3">
             {players.map((player) => (
               <Ranking key={player.rank} {...player} />
@@ -97,20 +105,33 @@ const LeaderboardPage = () => {
 
         {/* Top da Semana */}
         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-          <h2 className="text-2xl font-bold mb-6 text-center">Top Guarúlões da Semana</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">
+            Top Guarúlões da Semana
+          </h2>
           <div className="space-y-4">
             {players.slice(0, 5).map((player) => (
-              <div key={player.rank} className="flex items-center p-3 hover:bg-white/5 rounded-lg transition">
-                <div className={`w-8 h-8 flex items-center justify-center rounded-full font-bold mr-4 ${
-                  player.rank === 1 ? "bg-yellow-500 text-black" : 
-                  player.rank === 2 ? "bg-gray-400 text-black" : 
-                  player.rank === 3 ? "bg-amber-700 text-white" : "bg-white/10"
-                }`}>
+              <div
+                key={player.rank}
+                className="flex items-center p-3 hover:bg-white/5 rounded-lg transition"
+              >
+                <div
+                  className={`w-8 h-8 flex items-center justify-center rounded-full font-bold mr-4 ${
+                    player.rank === 1
+                      ? "bg-yellow-500 text-black"
+                      : player.rank === 2
+                      ? "bg-gray-400 text-black"
+                      : player.rank === 3
+                      ? "bg-amber-700 text-white"
+                      : "bg-white/10"
+                  }`}
+                >
                   {player.rank}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium truncate">{player.player}</p>
-                  <p className="text-sm text-gray-300 truncate">{player.team}</p>
+                  <p className="text-sm text-gray-300 truncate">
+                    {player.team}
+                  </p>
                 </div>
                 <div className="text-lg font-bold bg-indigo-600 rounded-full w-10 h-10 flex items-center justify-center">
                   {player.total}
