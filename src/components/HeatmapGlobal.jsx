@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -85,7 +85,11 @@ const HeatmapGlobal = () => {
                   <img
                     src="/local-icon.png"
                     alt="Ícone de localização"
-                    style={{ width: "20px", height: "20px", marginBottom: "5px" }}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      marginBottom: "5px",
+                    }}
                   />
                   <br />
                   <strong>{event.title}</strong>
