@@ -9,7 +9,7 @@ const User = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
 
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">
-            {isLogin ? "Sign in to your account" : "Create new account"}
+            {isLogin ? "Entre com a sua conta" : "Criar uma conta nova"}
           </h2>
         </div>
 
