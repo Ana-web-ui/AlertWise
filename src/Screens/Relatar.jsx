@@ -78,23 +78,26 @@ export default function Relatar() {
   }
 
   async function handleDeletar(id) {
-    if (!window.confirm("Tem certeza que deseja excluir este relato?")) return;
+  if (!window.confirm("Tem certeza que deseja excluir este relato?")) return;
 
-    setIsLoading(true);
-    try {await fetch(`https://alert-wise.onrender.com/relato`, {
+  setIsLoading(true);
+  try {
+    const response = await fetch(`https://alert-wise.onrender.com/relato/${id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
     });
-      
-    } catch (error) {
-      console.error("Erro ao deletar relato:", error);
-    } finally {
-      setIsLoading(false);
+
+    if (response.ok) {
+      setRelatos(prevRelatos => prevRelatos.filter(r => r.id !== id));
+    } else {
+      console.error("Erro da API:", await response.text());
     }
+  } catch (error) {
+    console.error("Erro ao deletar relato:", error);
+  } finally {
+    setIsLoading(false);
   }
+}
+
 
   function handleEditar(relato) {
     setEditandoRelatoId(relato.id);
