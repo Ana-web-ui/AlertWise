@@ -29,3 +29,23 @@ export async function createUser(name, email, password, urlApi) {
 
   return data;
 }
+
+export async function createRelato( email, password, content, urlApi) {
+  const res = await fetch(`${urlApi}/relato`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email,
+      password,
+      content,
+    })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    return { error: true, detail: data.detail };
+  }
+
+  return data;
+}
