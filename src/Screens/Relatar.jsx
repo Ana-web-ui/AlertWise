@@ -1,87 +1,178 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 
 export default function Relatar() {
-  const [relatos, setRelatos] = useState([
-    {
-      id: 1,
-      nome: "Maria Silva",
-      data: "27/05/2025",
-      texto: "Minha casa foi invadida pela água durante a chuva intensa. Perdemos móveis e documentos.",
-    },
-    {
-      id: 2,
-      nome: "João Oliveira",
-      data: "25/05/2025",
-      texto: "O bairro ficou sem luz por 3 dias após a enchente. Foi muito difícil cuidar das crianças.",
-    },
-  ]);
+  const [relato, setRelato] = useState("");
+  const [relatos, setRelatos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [editandoRelatoId, setEditandoRelatoId] = useState(null);
+  const [textoEditado, setTextoEditado] = useState("");
 
-  const [novoRelato, setNovoRelato] = useState({
-    nome: "",
-    texto: "",
-  });
+  const API_URL = "http://localhost:8000/relatos";
 
-  const handleChange = (e) => {
-    setNovoRelato({ ...novoRelato, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    buscarRelatos();
+  }, []);
 
-  const handleEnviar = (e) => {
+  async function buscarRelatos() {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(API_URL);
+      setRelatos(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar relatos:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function enviarRelato(e) {
     e.preventDefault();
-    const novo = {
-      id: relatos.length + 1,
-      nome: novoRelato.nome || "Anônimo",
-      texto: novoRelato.texto,
-      data: new Date().toLocaleDateString("pt-BR"),
-    };
-    setRelatos([novo, ...relatos]);
-    setNovoRelato({ nome: "", texto: "" });
-  };
+    if (!relato.trim()) return;
+
+    setIsLoading(true);
+    try {
+      const response = await axios.post(API_URL, { texto: relato });
+      setRelatos([...relatos, response.data]);
+      setRelato("");
+    } catch (error) {
+      console.error("Erro ao enviar relato:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handleDeletar(id) {
+    if (!window.confirm("Tem certeza que deseja excluir este relato?")) return;
+
+    setIsLoading(true);
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      setRelatos(relatos.filter((r) => r.id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar relato:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function handleEditar(relato) {
+    setEditandoRelatoId(relato.id);
+    setTextoEditado(relato.texto);
+  }
+
+  function handleCancelarEdicao() {
+    setEditandoRelatoId(null);
+    setTextoEditado("");
+  }
+
+  async function handleSalvarEdicao(id) {
+    if (!textoEditado.trim()) return;
+
+    setIsLoading(true);
+    try {
+      const response = await axios.put(`${API_URL}/${id}`, {
+        texto: textoEditado,
+      });
+      setRelatos(
+        relatos.map((r) => (r.id === id ? { ...r, texto: response.data.texto } : r))
+      );
+      setEditandoRelatoId(null);
+      setTextoEditado("");
+    } catch (error) {
+      console.error("Erro ao editar relato:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
-    <div className="min-h-screen  px-6 py-10">
-      <h1 className="text-3xl font-bold mb-6 text-white">📖 Relatos da Comunidade</h1>
+    <div className="max-w-2xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Envie seu Relato</h1>
+      <form onSubmit={enviarRelato} className="mb-6">
+        <textarea
+          className="w-full p-3 border rounded mb-2"
+          placeholder="Digite seu relato..."
+          value={relato}
+          onChange={(e) => setRelato(e.target.value)}
+          rows={4}
+          disabled={isLoading}
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          disabled={isLoading}
+        >
+          Enviar
+        </button>
+      </form>
 
-      {/* Lista de Relatos */}
-      <div className="space-y-6 mb-12">
-        {relatos.map((relato) => (
-          <div key={relato.id} className="bg-gray-100 p-4 rounded-xl shadow">
-            <div className="flex justify-between mb-2">
-              <span className="font-semibold text-gray-700">{relato.nome}</span>
-              <span className="text-sm text-gray-500">{relato.data}</span>
-            </div>
-            <p className="text-gray-800">{relato.texto}</p>
-          </div>
-        ))}
-      </div>
+      <h2 className="text-xl font-semibold mb-3">Relatos Recebidos</h2>
 
-      {/* Formulário de Relato */}
-      <div className="bg-blue-50 p-6 rounded-xl shadow-lg">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-700">Compartilhe seu relato</h2>
-        <form onSubmit={handleEnviar} className="space-y-4">
-          <input
-            type="text"
-            name="nome"
-            placeholder="Seu nome (opcional)"
-            value={novoRelato.nome}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2"
-          />
-          <textarea
-            name="texto"
-            required
-            placeholder="Conte aqui o que aconteceu..."
-            value={novoRelato.texto}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2 h-32"
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Enviar Relato
-          </button>
-        </form>
-      </div>
+      {isLoading ? (
+        <p className="text-gray-500">Carregando...</p>
+      ) : (
+        <div className="space-y-4">
+          {relatos.length === 0 ? (
+            <p className="text-gray-500">Nenhum relato enviado ainda.</p>
+          ) : (
+            relatos.map((relato) => (
+              <div
+                key={relato.id}
+                className="border p-4 rounded shadow-sm bg-white"
+              >
+                {editandoRelatoId === relato.id ? (
+                  <div>
+                    <textarea
+                      className="w-full p-2 border rounded mb-2"
+                      value={textoEditado}
+                      onChange={(e) => setTextoEditado(e.target.value)}
+                      rows={3}
+                      disabled={isLoading}
+                    />
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleSalvarEdicao(relato.id)}
+                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                        disabled={isLoading}
+                      >
+                        Salvar
+                      </button>
+                      <button
+                        onClick={handleCancelarEdicao}
+                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                        disabled={isLoading}
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <p className="text-gray-800 mb-2">{relato.texto}</p>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleEditar(relato)}
+                        className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600"
+                        disabled={isLoading}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => handleDeletar(relato.id)}
+                        className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+                        disabled={isLoading}
+                      >
+                        Deletar
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }
