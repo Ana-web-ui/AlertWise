@@ -1,164 +1,112 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Relatar() {
-  const [relato, setRelato] = useState("");
   const [relatos, setRelatos] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [editandoRelatoId, setEditandoRelatoId] = useState(null);
-  const [textoEditado, setTextoEditado] = useState("");
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const API_URL = "https://alert-wise.onrender.com/relato";
+  const [novoRelato, setNovoRelato] = useState({
+    name: "",
+    email: "",
+    password: "",
+    content: "",
+    date_published: "",
+  });
+
+  const fetchRelatos = async () => {
+    try {
+      const response = await fetch("https://alert-wise.onrender.com/relatos");
+      if (!response.ok) {
+        throw new Error("Erro ao carregar relatos");
+      }
+      const data = await response.json();
+      console.log(data);
+
+      setRelatos(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function carregarRelatos() {
-      setIsLoading(true);
-      try {
-        const response = await fetch("https://alert-wise.onrender.com/relato");
-        if (!response.ok) {
-          throw new Error("Erro ao carregar relatos");
-        }
-        const dados = await response.json();
-        setRelatos(dados);
-      } catch (error) {
-        console.error("Erro ao carregar relatos:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    carregarRelatos();
+    fetchRelatos();
   }, []);
 
-  async function enviarRelato(e) {
+  const handleChange = (e) => {
+    setNovoRelato({ ...novoRelato, [e.target.name]: e.target.value });
+  };
+
+  async function handleDelete(id) {
+    try {
+      setIsLoading(true);
+
+      const response = await fetch(
+        `https://alert-wise.onrender.com/relato?post_id=${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Erro ao carregar relatos");
+      }
+
+      fetchRelatos();
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleEnviar = async (e) => {
     e.preventDefault();
 
-    // Validação dos campos
-    if (!relato.trim() || !nome.trim() || !email.trim() || !senha.trim()) {
-      alert("Por favor, preencha todos os campos corretamente");
-      return;
-    }
+    const relatoData = {
+      ...novoRelato,
+    };
 
-    setIsLoading(true);
     try {
-      const API_URL = "https://alert-wise.onrender.com/relato"; 
-      // 2. Objeto com os dados no formato que o backend espera
-      const dadosRelato = {
-        name: nome.trim(), // Verifique se o backend espera 'name' ou 'nome'
-        email: email.trim(),
-        password: senha.trim(), // Ou 'senha' dependendo do backend
-        content: relato.trim(), // Ou 'conteudo'
-        // Alguns backends exigem data de criação
-        createdAt: new Date().toISOString(),
-      };
-
-      console.log("Enviando dados:", dadosRelato);
-
-      // 3. Faça a requisição com tratamento de erros melhorado
-      const response = await fetch(API_URL, {
+      const response = await fetch("https://alert-wise.onrender.com/relato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Se precisar de autenticação:
-          // "Authorization": `Bearer ${seuToken}`
         },
-        body: JSON.stringify(dadosRelato),
-      });
-
-      console.log("Resposta da API:", response);
-
-      if (!response.ok) {
-        // Tenta obter mais detalhes do erro
-        const errorDetails = await response.text();
-        console.error("Detalhes do erro:", errorDetails);
-        throw new Error(`Erro ${response.status}: ${errorDetails}`);
-      }
-
-      const novoRelato = await response.json();
-      console.log("Relato criado:", novoRelato);
-
-      // Atualiza o estado
-      setRelatos((prev) => [...prev, novoRelato]);
-
-      // Limpa o formulário
-      setRelato("");
-      setNome("");
-      setEmail("");
-      setSenha("");
-
-      alert("Relato enviado com sucesso!");
-    } catch (error) {
-      console.error("Erro completo:", error);
-      alert(`Falha ao enviar: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  async function handleDeletar(id) {
-    if (!window.confirm("Tem certeza que deseja excluir este relato?")) return;
-
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${API_URL}?post_id=${id}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        setRelatos((prevRelatos) => prevRelatos.filter((r) => r.id !== id));
-      } else {
-        console.error("Erro da API:", await response.text());
-      }
-    } catch (error) {
-      console.error("Erro ao deletar relato:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  function handleEditar(relato) {
-    setEditandoRelatoId(relato.id);
-    setTextoEditado(relato.conteudo);
-  }
-
-  function handleCancelarEdicao() {
-    setEditandoRelatoId(null);
-    setTextoEditado("");
-  }
-
-  async function handleSalvarEdicao(id) {
-    if (!textoEditado.trim()) return;
-
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${API_URL}?post_id=${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          conteudo: textoEditado,
-        }),
+        body: JSON.stringify(relatoData),
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao atualizar relato");
+        throw new Error("Erro ao enviar relato");
       }
 
-      const relatoAtualizado = await response.json();
-      setRelatos((prevRelatos) =>
-        prevRelatos.map((r) =>
-          r.id === id ? { ...r, conteudo: relatoAtualizado.conteudo } : r
-        )
-      );
-      setEditandoRelatoId(null);
-      setTextoEditado("");
-    } catch (error) {
-      console.error("Erro ao editar relato:", error);
-    } finally {
-      setIsLoading(false);
+      const data = await response.json();
+      console.log(data);
+
+      setNovoRelato({
+        name: "",
+        email: "",
+        password: "",
+        title: "",
+        content: "",
+        date_published: "",
+      });
+    } catch (err) {
+      setError(err.message);
     }
+  };
+
+  function handleData(data) {
+    const dataISO = "2025-06-06T21:02:05";
+    const [dataCompleta] = dataISO.split("T");
+    const [ano, mes, dia] = dataCompleta.split("-");
+    return `${dia}/${mes}/${ano}`;
   }
+
+  if (isLoading) return <div>Carregando...</div>;
+  if (error) return <div>Erro: {error}</div>;
 
   return (
     <div className="max-w-2xl mx-auto p-4">
