@@ -1,37 +1,43 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
-const Mapa = () => {
-  const position = [-23.5505, -46.6333];
+
+const localizacaoIcone = new L.Icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [0, -30],
+});
+
+const Mapa = ({ dadosClima }) => {
+  const lat = dadosClima?.coord?.lat;
+  const lon = dadosClima?.coord?.lon;
+
+  const position = lat && lon ? [lat, lon] : [-12.51, -47.64]; // posição default
 
   return (
     <div className="h-full rounded-xl overflow-hidden border border-gray-300">
       <MapContainer
-        center={[-12.51, -47.64]}
-        zoom={5}
+        center={position}
+        zoom={6}
         style={{ height: "100%", width: "100%" }}
-        trackResize={false}
-        dragging={true} // Permite arrastar apenas quando clicado
-        touchZoom={true} // Permite zoom com toque
-        doubleClickZoom={true} // Permite zoom com duplo clique
-        scrollWheelZoom={false} // Desativa zoom com roda do mouse
-        boxZoom={true} // Permite zoom com seleção de área
-        keyboard={false} // Desativa controles por teclado
-        zoomControl={true} // Mostra controles de zoom
-        tap={false} // Desativa interação por toque simples
+        scrollWheelZoom={false}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        <Marker position={position}>
+
+        <Marker position={position} icon={localizacaoIcone}>
           <Popup>
-            Exemplo de localização <br /> em São Paulo.
+            {dadosClima?.weather?.[0]
+              ? `${dadosClima.name}: ${dadosClima.weather[0].description}, ${dadosClima.main.temp}°C`
+              : "Local padrão"}
           </Popup>
         </Marker>
       </MapContainer>
     </div>
   );
 };
-
 export default Mapa;

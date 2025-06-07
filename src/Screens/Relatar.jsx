@@ -109,95 +109,144 @@ export default function Relatar() {
   if (error) return <div>Erro: {error}</div>;
 
   return (
-    <div className="min-h-screen px-6 py-10">
-      <h1 className="text-3xl font-bold mb-6 text-white">
-        📖 Relatos da Comunidade
-      </h1>
+    <div className="max-w-2xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4 text-white">Envie seu Relato</h1>
+      <form onSubmit={enviarRelato} className="mb-6 space-y-2 text-white">
+        <input
+          type="text"
+          placeholder="Seu nome"
+          className="w-full p-3 border rounded bg-white text-blue-900"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Seu email"
+          className="w-full p-3 border rounded bg-white text-blue-900"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Sua senha"
+          className="w-full p-3 border rounded bg-white text-blue-900"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
+        <textarea
+          className="w-full p-3 border rounded bg-white text-blue-900"
+          placeholder="Digite seu relato..."
+          value={relato}
+          onChange={(e) => setRelato(e.target.value)}
+          rows={4}
+          required
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          disabled={isLoading}
+        >
+          Enviar
+        </button>
+      </form>
 
-      {/* Lista de Relatos */}
-      <div className="space-y-6 mb-12">
-        {relatos.map((relato) => (
-          <div key={relato[0]} className="bg-gray-100 p-4 rounded-xl shadow">
-            <div className="flex flex-col justify-between mb-2">
-              <span className="font-semibold text-gray-700">{relato[1]}</span>
-              <span className="text-sm text-gray-500">
-                {handleData(relato[3])}
-              </span>
-            </div>
-            <p className="text-gray-800 mb-3">{relato[2]}</p>
+      <h2 className="text-xl font-semibold mb-3 text-white">
+        Relatos Recebidos
+      </h2>
 
-            <button
-              onClick={() => handleDelete(relato[0])}
-              className="bg-red-600 text-white px-3 py-1 rounded-md cursor-pointer hover:bg-red-700 hover:scale-105 duration-300"
-            >
-              Deletar
-            </button>
+      {isLoading ? (
+        <p className="text-gray-50">Carregando...</p>
+      ) : (
+        <div className="space-y-4">
+          {relatos.length === 0 ? (
+            <p className="text-gray-50">Nenhum relato enviado ainda.</p>
+          ) : (
+            relatos.map((relato) => {
+              {console.log(relato)}
+              {console.log(relatos)}
+              const nome = relato.nome || relato.name;
+              const conteudo =
+                relato.conteudo || relato.content;
+              const dataRelato = relato.data || relato.createdAt || relato.date;
 
-            <button
-              // onClick={() => }
-              className="bg-yellow-600 ms-5 text-white px-3 py-1 rounded-md cursor-pointer hover:bg-red-700 hover:scale-105 duration-300"
-            >
-              Editar
-            </button>
-          </div>
-        ))}
-      </div>
+              // Função para formatar a data com segurança
+              const formatarData = (dataString) => {
+                if (!dataString) return "Data não disponível";
+                try {
+                  const data = new Date(dataString);
+                  return isNaN(data.getTime())
+                    ? "Data inválida"
+                    : data.toLocaleString();
+                } catch {
+                  return "Data inválida";
+                }
+              };
 
-      {/* Formulário de Relato */}
-      <div className="bg-blue-50 p-6 rounded-xl shadow-lg">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-          Compartilhe seu relato
-        </h2>
-        {error && <div className="text-red-500 mb-4">{error}</div>}
-        <form onSubmit={handleEnviar} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Seu nome (opcional)"
-            value={novoRelato.name}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Seu e-mail (opcional)"
-            value={novoRelato.email}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Sua senha (opcional)"
-            value={novoRelato.password}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2"
-          />
-          <input
-            type="text"
-            name="title"
-            placeholder="Título do relato (opcional)"
-            value={novoRelato.title}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2"
-          />
-          <textarea
-            name="content"
-            required
-            placeholder="Conte aqui o que aconteceu..."
-            value={novoRelato.content}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded p-2 h-32"
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Enviar Relato
-          </button>
-        </form>
-      </div>
+              return (
+                <div
+                  key={relato.id}
+                  className="border p-4 rounded shadow-sm bg-white"
+                >
+                  {editandoRelatoId === relato.id ? (
+                    <div>
+                      <textarea
+                        className="w-full p-2 border rounded mb-2"
+                        value={textoEditado}
+                        onChange={(e) => setTextoEditado(e.target.value)}
+                        rows={3}
+                        disabled={isLoading}
+                      />
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleSalvarEdicao(relato.id)}
+                          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                          disabled={isLoading}
+                        >
+                          Salvar
+                        </button>
+                        <button
+                          onClick={handleCancelarEdicao}
+                          className="bg-gray-300 text-gray-50 px-4 py-2 rounded hover:bg-gray-400"
+                          disabled={isLoading}
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <h3 className="font-bold text-lg">{nome}</h3>
+                      <p className="text-gray-800 mb-2">{conteudo}</p>
+                      <p className="text-gray-500 text-sm">
+                        {formatarData(dataRelato)}
+                      </p>
+                      <div className="flex space-x-2 mt-2">
+                        <button
+                          onClick={() => handleEditar(relato)}
+                          className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600"
+                          disabled={isLoading}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDeletar(relato.id)}
+                          className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+                          disabled={isLoading}
+                        >
+                          Deletar
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
     </div>
   );
 }
